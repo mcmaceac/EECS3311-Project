@@ -6,18 +6,31 @@ note
 
 class
 	ETF_ADD_USER
-inherit 
+inherit
 	ETF_ADD_USER_INTERFACE
 		redefine add_user end
 create
 	make
-feature -- command 
+feature -- command
 	add_user(uid: INTEGER_64 ; user_name: STRING)
-		require else 
+		require else
 			add_user_precond(uid, user_name)
     	do
 			-- perform some update on the model state
 			model.default_update
+
+			if uid <= 0 then
+				model.e.make_from_string ("  ID must be a positive integer.")
+			else if across model.m.users.current_keys as ck some ck.item = uid end then
+				model.e.make_from_string ("  ID already in use.")
+			else if user_name.count > 0 and not user_name.at (1).is_alpha then
+				model.e.make_from_string ("  User name must start with a letter.")
+			else
+				model.m.add_user (uid, user_name)
+			end
+			end
+			end
+
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

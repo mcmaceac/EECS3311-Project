@@ -20,13 +20,17 @@ feature {NONE} -- Initialization
 	make
 			-- Initialization for `Current'.
 		do
-			create s.make_empty
 			i := 0
+			create m.make
+			create e.make_empty
+			create message.make_empty
 		end
 
 feature -- model attributes
-	s : STRING
 	i : INTEGER
+	m : MESSENGER
+	e : STRING			-- error message
+	message : STRING			-- warning message
 
 feature -- model operations
 	default_update
@@ -45,9 +49,34 @@ feature -- queries
 	out : STRING
 		do
 			create Result.make_from_string ("  ")
-			Result.append (i.out)
-			Result.append (":  OK%N")
-			default_update
+			if m.num_users = 0 and e.count = 0 and message.count = 0 then
+				Result.append (i.out)
+				Result.append (":  OK%N")
+			else if e.count > 0 then
+				Result.append (i.out)
+				Result.append (":  ERROR%N")
+				Result.append (e)
+				e.wipe_out						--clearing the error
+			else if message.count > 0 then
+				Result.append (i.out)
+				Result.append (":  OK%N")
+				Result.append (message)
+				message.wipe_out				--clearing the message
+			else
+				Result.append (i.out)
+				Result.append (":  OK%N")
+				Result.append ("  Users:%N")
+				Result.append (m.list_users ("      ", false))
+				Result.append ("%N")
+				Result.append ("  Groups:%N")
+				Result.append (m.list_groups ("      ", false))
+				Result.append ("%N")
+				Result.append ("  Registrations:%N")
+				Result.append ("  All messages:%N")
+				Result.append ("  Message state:%N")
+			end
+			end
+			end
 		end
 
 end
