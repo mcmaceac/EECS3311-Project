@@ -63,6 +63,7 @@ feature -- queries
 				Result.append (users.key_for_iteration.out)
 				Result.append ("->")
 				Result.append (users.item_for_iteration.out)
+				Result.append ("%N")
 				users.forth
 			end
 		end
@@ -81,6 +82,7 @@ feature -- queries
 				Result.append (groups.key_for_iteration.out)
 				Result.append ("->")
 				Result.append (groups.item_for_iteration.out)
+				Result.append ("%N")
 				groups.forth
 			end
 		end
