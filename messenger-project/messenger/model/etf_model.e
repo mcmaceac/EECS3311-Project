@@ -45,10 +45,9 @@ feature -- queries
 	out : STRING
 		do
 			create Result.make_from_string ("  ")
-			Result.append ("System State: default model state ")
-			Result.append ("(")
 			Result.append (i.out)
-			Result.append (")")
+			Result.append (":  OK%N")
+			default_update
 		end
 
 end
