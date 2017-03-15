@@ -30,7 +30,7 @@ feature
 		do
 			create users.make
 			--create user_key_order.make
-			create groups.make 
+			create groups.make
 			--create group_key_order.make
 		end
 
@@ -76,23 +76,8 @@ feature -- queries
 			Result := across users as u some u.item.id = id end
 		end
 
---	list_users (indent: STRING): STRING
---		do
---			create Result.make_empty
---			from
---				users.start
---			until
---				users.after
---			loop
---				Result.append (indent)
---				Result.append (users.key_for_iteration.out)
---				Result.append ("->")
---				Result.append (users.item_for_iteration.out)
---				Result.append ("%N")
---				users.forth
---			end
---		end
 	list_users: STRING
+		--lists the users in order of their id
 		do
 			create Result.make_empty
 			from
@@ -109,43 +94,23 @@ feature -- queries
 			end
 		end
 
---	list_users_by_id (indent: STRING): STRING
---		do
---			create Result.make_empty
---			from
---				user_key_order.start
---			until
---				user_key_order.after
---			loop
---				Result.append (indent)
---				Result.append (user_key_order.item_for_iteration.out)
---				Result.append ("->")
---				if attached users.at (user_key_order.item_for_iteration) as u then
---					Result.append (u.out)
---				end
---				Result.append ("%N")
---				user_key_order.forth
---			end
---		end
-
---	list_groups (indent: STRING): STRING
---		--if order is set to true, then we are calling from etf_list_users,
---		--in which case we should order by name. Otherwise we order by ID
---		do
---			create Result.make_empty
---			from
---				groups.start
---			until
---				groups.after
---			loop
---				Result.append (indent)
---				Result.append (groups.key_for_iteration.out)
---				Result.append ("->")
---				Result.append (groups.item_for_iteration.out)
---				Result.append ("%N")
---				groups.forth
---			end
---		end
+	list_groups (indent: STRING): STRING
+		--lists the groups in order of their id
+		do
+			create Result.make_empty
+			from
+				groups.start
+			until
+				groups.after
+			loop
+				Result.append (indent)
+				Result.append (groups.item_for_iteration.id.out)
+				Result.append ("->")
+				Result.append (groups.item_for_iteration.name)
+				Result.append ("%N")
+				groups.forth
+			end
+		end
 
 --	list_groups_by_id (indent: STRING): STRING
 --		do
