@@ -92,6 +92,7 @@ feature -- queries
 
 	list_users: STRING
 		do
+		--lists the users in order of their name
 			sort_by_id := false --indicating we need to sort by name instead
 			users.sort
 			create Result.make_empty
@@ -131,6 +132,7 @@ feature -- queries
 
 	list_groups: STRING
 		do
+		--lists the groups in order of their name
 			sort_by_id := false
 			groups.sort
 			create Result.make_empty
