@@ -21,7 +21,9 @@ feature -- command
 
 			if uid <= 0 then
 				model.e.make_from_string ("  ID must be a positive integer.")
-			else if across model.m.users.current_keys as ck some ck.item = uid end then
+--			else if across model.m.users.current_keys as ck some ck.item = uid end then
+--				model.e.make_from_string ("  ID already in use.")
+			else if model.m.user_id_exists (uid) then
 				model.e.make_from_string ("  ID already in use.")
 			else if user_name.count > 0 and not user_name.at (1).is_alpha then
 				model.e.make_from_string ("  User name must start with a letter.")
@@ -30,6 +32,7 @@ feature -- command
 			end
 			end
 			end
+			--end
 
 			etf_cmd_container.on_change.notify ([Current])
     	end
