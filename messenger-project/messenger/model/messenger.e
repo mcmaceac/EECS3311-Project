@@ -14,15 +14,14 @@ feature -- attributes
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
 
-	--users: HASH_TABLE[STRING, INTEGER_64]
-	--user_key_order: SORTED_TWO_WAY_LIST[INTEGER_64]
-
-	--groups: HASH_TABLE[STRING, INTEGER_64]
-	--group_key_order: SORTED_TWO_WAY_LIST[INTEGER_64]
-
 	num_users: INTEGER_64
 		do
 			Result := users.count
+		end
+
+	num_groups: INTEGER_64
+		do
+			Result := groups.count
 		end
 
 feature
