@@ -6,6 +6,8 @@ note
 
 class
 	GROUP
+inherit
+	COMPARABLE
 
 create make
 
@@ -19,5 +21,11 @@ feature --creation
 feature --attributes
 	name: STRING
 	id: INTEGER_64
+
+feature --comparable
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := id < other.id
+		end
 
 end
