@@ -68,15 +68,15 @@ feature -- queries
 
 	user_id_exists (id: INTEGER_64): BOOLEAN
 		do
-			Result := across groups as g some g.item.id = id end
+			Result := across users as u some u.item.id = id end
 		end
 
 	group_id_exists (id: INTEGER_64): BOOLEAN
 		do
-			Result := across users as u some u.item.id = id end
+			Result := across groups as g some g.item.id = id end
 		end
 
-	list_users: STRING
+	list_users_by_id: STRING
 		--lists the users in order of their id
 		do
 			create Result.make_empty
@@ -94,7 +94,7 @@ feature -- queries
 			end
 		end
 
-	list_groups (indent: STRING): STRING
+	list_groups_by_id: STRING
 		--lists the groups in order of their id
 		do
 			create Result.make_empty
@@ -103,7 +103,7 @@ feature -- queries
 			until
 				groups.after
 			loop
-				Result.append (indent)
+				Result.append ("      ")
 				Result.append (groups.item_for_iteration.id.out)
 				Result.append ("->")
 				Result.append (groups.item_for_iteration.name)
@@ -111,23 +111,4 @@ feature -- queries
 				groups.forth
 			end
 		end
-
---	list_groups_by_id (indent: STRING): STRING
---		do
---			create Result.make_empty
---			from
---				group_key_order.start
---			until
---				group_key_order.after
---			loop
---				Result.append (indent)
---				Result.append (group_key_order.item_for_iteration.out)
---				Result.append ("->")
---				if attached users.at (group_key_order.item_for_iteration) as g then
---					Result.append (g.out)
---				end
---				Result.append ("%N")
---				group_key_order.forth
---			end
---		end
 end
