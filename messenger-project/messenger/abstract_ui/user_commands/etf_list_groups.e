@@ -20,7 +20,7 @@ feature -- command
 			if model.m.num_groups = 0 then
 				model.message.make_from_string ("  There are no groups registered in the system yet.%N")
 			else
-				model.message.make_from_string (model.m.list_groups_by_id)
+				model.message.make_from_string (model.m.list_groups)
 			end
 			etf_cmd_container.on_change.notify ([Current])
     	end
