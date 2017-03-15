@@ -9,10 +9,12 @@ class
 
 create make
 
-feature -- attributes
+feature {NONE} -- private attributes
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
+
+feature -- attributes
 	sort_by_id: BOOLEAN
 
 	num_users: INTEGER_64
@@ -25,7 +27,7 @@ feature -- attributes
 			Result := groups.count
 		end
 
-feature
+feature -- creation
 	make
 		do
 			create users.make
@@ -91,8 +93,8 @@ feature -- queries
 		end
 
 	list_users: STRING
-		do
 		--lists the users in order of their name
+		do
 			sort_by_id := false --indicating we need to sort by name instead
 			users.sort
 			create Result.make_empty
@@ -131,8 +133,8 @@ feature -- queries
 		end
 
 	list_groups: STRING
+		--lists the users in order of their name
 		do
-		--lists the groups in order of their name
 			sort_by_id := false
 			groups.sort
 			create Result.make_empty
