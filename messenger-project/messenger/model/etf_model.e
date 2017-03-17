@@ -49,12 +49,12 @@ feature -- queries
 	out : STRING
 		do
 			create Result.make_from_string ("  ")
-			if m.num_users = 0 and e.count = 0 and message.count = 0 then
+			if m.num_users = 0 and e.count = 0 and message.count = 0 then		--start
 				Result.append (i.out)
 				Result.append (":  OK%N")
 			else if e.count > 0 then
 				Result.append (i.out)
-				Result.append (":  ERROR%N")
+				Result.append (":  ERROR %N")
 				Result.append (e)
 				e.wipe_out						--clearing the error
 			else if message.count > 0 then

@@ -15,6 +15,7 @@ feature {NONE} -- private attributes
 	groups: SORTED_TWO_WAY_LIST[GROUP]
 
 feature -- attributes
+
 	sort_by_id: BOOLEAN
 
 	num_users: INTEGER_64
@@ -95,7 +96,7 @@ feature -- queries
 	list_users: STRING
 		--lists the users in order of their name
 		do
-			sort_by_id := false --indicating we need to sort by name instead
+			sort_by_id := false
 			users.sort
 			create Result.make_empty
 			from
