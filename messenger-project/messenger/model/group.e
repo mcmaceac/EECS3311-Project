@@ -8,6 +8,9 @@ class
 	GROUP
 inherit
 	COMPARABLE
+		redefine
+			out
+		end
 
 create make
 
@@ -23,6 +26,15 @@ feature --attributes
 	name: STRING
 	id: INTEGER_64
 	messenger: MESSENGER
+
+feature --queries
+	out: STRING
+		do
+			create Result.make_empty
+			Result.append (id.out)
+			Result.append ("->")
+			Result.append (name)
+		end
 
 feature --comparable
 	is_less alias "<" (other: like Current): BOOLEAN

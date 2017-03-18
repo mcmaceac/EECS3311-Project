@@ -70,6 +70,7 @@ feature -- queries
 				Result.append ("  Groups:%N")
 				Result.append (m.list_groups_by_id)
 				Result.append ("  Registrations:%N")
+				Result.append (m.list_registrations)
 				Result.append ("  All messages:%N")
 				Result.append ("  Message state:%N")
 			end

@@ -13,6 +13,7 @@ feature {NONE} -- private attributes
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
+	registry: REGISTRY
 
 feature -- attributes
 
@@ -33,6 +34,7 @@ feature -- creation
 		do
 			create users.make
 			create groups.make
+			create registry.make
 		end
 
 feature -- commands
@@ -61,6 +63,24 @@ feature -- commands
 			groups.force (l_group)
 		end
 
+	register_user (uid: INTEGER_64; gid: INTEGER_64)
+		require
+			user_id_exists (uid)
+			group_id_exists (gid)
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					across groups as g
+					loop
+						if g.item.id = gid then
+							u.item.register (g.item)
+						end
+					end
+				end
+			end
+		end
+
 feature -- queries
 
 	user_id_exists (id: INTEGER_64): BOOLEAN
@@ -85,9 +105,7 @@ feature -- queries
 				users.after
 			loop
 				Result.append ("      ")
-				Result.append (users.item_for_iteration.id.out)
-				Result.append ("->")
-				Result.append (users.item_for_iteration.name)
+				Result.append (users.item_for_iteration.out)
 				Result.append ("%N")
 				users.forth
 			end
@@ -105,9 +123,7 @@ feature -- queries
 				users.after
 			loop
 				Result.append ("  ")
-				Result.append (users.item_for_iteration.id.out)
-				Result.append ("->")
-				Result.append (users.item_for_iteration.name)
+				Result.append (users.item_for_iteration.out)
 				Result.append ("%N")
 				users.forth
 			end
@@ -125,9 +141,7 @@ feature -- queries
 				groups.after
 			loop
 				Result.append ("      ")
-				Result.append (groups.item_for_iteration.id.out)
-				Result.append ("->")
-				Result.append (groups.item_for_iteration.name)
+				Result.append (groups.item_for_iteration.out)
 				Result.append ("%N")
 				groups.forth
 			end
@@ -145,11 +159,26 @@ feature -- queries
 				groups.after
 			loop
 				Result.append ("  ")
-				Result.append (groups.item_for_iteration.id.out)
-				Result.append ("->")
-				Result.append (groups.item_for_iteration.name)
+				Result.append (groups.item_for_iteration.out)
 				Result.append ("%N")
 				groups.forth
+			end
+		end
+
+	list_registrations: STRING
+		do
+			create Result.make_empty
+			from
+				users.start
+			until
+				users.after
+			loop
+				if users.item_for_iteration.number_of_groups /= 0 then
+					Result.append ("      ")
+					Result.append (users.item_for_iteration.list_registrations)
+					Result.append ("%N")
+				end
+				users.forth
 			end
 		end
 end

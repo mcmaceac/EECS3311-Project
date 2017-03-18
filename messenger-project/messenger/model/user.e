@@ -8,6 +8,9 @@ class
 	USER
 inherit
 	COMPARABLE
+		redefine
+			out
+		end
 
 create make
 
@@ -17,12 +20,62 @@ feature --creation
 			name := l_name
 			id := l_id
 			messenger := l_m
+			create groups.make
 		end
 
 feature --attributes
 	name: STRING
 	id: INTEGER_64
 	messenger: MESSENGER
+	groups: SORTED_TWO_WAY_LIST[GROUP]
+
+feature --commands
+	register (g: GROUP) --register this user to group g
+		do
+			groups.force (g)
+--			io.put_string ("USER: ")
+--			io.put_string (name)
+--			io.put_string (" REGISTERING TO: ")
+--			io.put_string (g.name)
+--			io.put_string ("%N")
+		end
+
+feature --queries
+	out: STRING
+		do
+			create Result.make_empty
+			Result.append (id.out)
+			Result.append ("->")
+			Result.append (name)
+		end
+	list_registrations: STRING
+		do
+			create Result.make_empty
+			Result.append ("[")
+			Result.append (id.out)
+			Result.append (", ")
+			Result.append (name)
+			Result.append ("]->{")
+			from
+				groups.start
+			until
+				groups.after
+			loop
+				Result.append (groups.item_for_iteration.out)
+				groups.forth
+				if groups.after then		--end of group list
+					Result.append ("}")
+				else						--not end yet, comma sep
+					Result.append (", ")
+				end
+			end
+		end
+
+	number_of_groups: INTEGER_64
+		--number of groups this user is a part of
+		do
+			Result := groups.count
+		end
 
 feature --comparable
 	is_less alias "<" (other: like Current): BOOLEAN
