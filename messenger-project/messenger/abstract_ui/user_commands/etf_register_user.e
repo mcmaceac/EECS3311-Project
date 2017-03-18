@@ -15,7 +15,7 @@ feature -- command
 	register_user(uid: INTEGER_64 ; gid: INTEGER_64)
 		require else
 			register_user_precond(uid, gid)
-    	do
+    	do 
 			-- perform some update on the model state
 			model.default_update
 
