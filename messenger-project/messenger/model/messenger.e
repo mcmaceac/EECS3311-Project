@@ -13,11 +13,12 @@ feature {NONE} -- private attributes
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
-	all_messages: LINKED_LIST[TUPLE[m_number: INTEGER_64; sender: INTEGER_64; group: INTEGER_64; content: STRING]]
+	all_messages: LINKED_LIST[MESSAGE]
 
 feature -- attributes
 
 	message_number: INTEGER_64
+	message_length: INTEGER_64
 	sort_by_id: BOOLEAN
 
 	num_users: INTEGER_64
@@ -37,6 +38,7 @@ feature -- creation
 			create groups.make
 			create all_messages.make
 			message_number := 1
+			message_length := 15
 		end
 
 feature -- commands
@@ -94,9 +96,10 @@ feature -- commands
 			no_empty_message: not txt.is_empty
 			authorization: registration_exists (uid, gid)
 		local
-			l_m: TUPLE[INTEGER_64, INTEGER_64, INTEGER_64, STRING]
+			l_m: MESSAGE
 		do
-			l_m := [message_number, uid, gid, txt]
+			create l_m.make (message_number, uid, gid, txt, Current)
+			message_number := message_number + 1
 			across groups as g
 			loop
 				if g.item.id = gid then
@@ -104,6 +107,11 @@ feature -- commands
 				end
 			end
 			all_messages.force (l_m)
+		end
+
+	set_message_preview (length: INTEGER_64)
+		do
+			message_length := length
 		end
 
 feature -- queries
@@ -122,18 +130,15 @@ feature -- queries
 		--lists all of the messages sent
 		do
 			create Result.make_empty
---			across all_messages as a
---			all
---				Result.append ("      ")
---				Result.append (a.item[1].out)
---				Result.append ("->[sender: ")
---				Result.append (a.item[2].out)
---				Result.append (", group: ")
---				Result.append (a.item[3].out)
---				Result.append (", content: %"")
---				Result.append (a.item[4].out)
---				Result.append ("...%"]")
---			end
+			from
+				all_messages.start
+			until
+				all_messages.after
+			loop
+				Result.append ("      ")
+				Result.append (all_messages.item_for_iteration.out)
+				all_messages.forth
+			end
 		end
 
 	list_users_by_id: STRING

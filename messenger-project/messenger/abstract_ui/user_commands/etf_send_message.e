@@ -6,18 +6,21 @@ note
 
 class
 	ETF_SEND_MESSAGE
-inherit 
+inherit
 	ETF_SEND_MESSAGE_INTERFACE
 		redefine send_message end
 create
 	make
-feature -- command 
+feature -- command
 	send_message(uid: INTEGER_64 ; gid: INTEGER_64 ; txt: STRING)
-		require else 
+		require else
 			send_message_precond(uid, gid, txt)
     	do
 			-- perform some update on the model state
 			model.default_update
+
+			model.m.send_message (uid, gid, txt)
+			
 			etf_cmd_container.on_change.notify ([Current])
     	end
 
