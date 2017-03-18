@@ -46,7 +46,8 @@ feature --queries
 				Result.append (content)
 			else
 				Result.append (content.substring (1, messenger.message_length.as_integer_32))
+				Result.append ("...")
 			end
-			Result.append ("...%"]%N")
+			Result.append ("%"]%N")
 		end
 end
