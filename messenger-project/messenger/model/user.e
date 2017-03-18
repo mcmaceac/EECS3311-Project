@@ -33,11 +33,6 @@ feature --commands
 	register (g: GROUP) --register this user to group g
 		do
 			groups.force (g)
---			io.put_string ("USER: ")
---			io.put_string (name)
---			io.put_string (" REGISTERING TO: ")
---			io.put_string (g.name)
---			io.put_string ("%N")
 		end
 
 feature --queries
@@ -75,6 +70,12 @@ feature --queries
 		--number of groups this user is a part of
 		do
 			Result := groups.count
+		end
+
+	member_of (gid: INTEGER_64): BOOLEAN
+		--is this user a member of group with id gid?
+		do
+			Result := across groups as g some g.item.id = gid end
 		end
 
 feature --comparable

@@ -13,7 +13,6 @@ feature {NONE} -- private attributes
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
-	registry: REGISTRY
 
 feature -- attributes
 
@@ -34,7 +33,6 @@ feature -- creation
 		do
 			create users.make
 			create groups.make
-			create registry.make
 		end
 
 feature -- commands
@@ -179,6 +177,16 @@ feature -- queries
 					Result.append ("%N")
 				end
 				users.forth
+			end
+		end
+
+	registration_exists (uid: INTEGER_64; gid: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.member_of (gid)
+				end
 			end
 		end
 end
