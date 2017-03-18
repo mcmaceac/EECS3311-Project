@@ -16,8 +16,12 @@ feature -- command
     	do
 			-- perform some update on the model state
 			model.default_update
-			
 
+			if n <= 0 then
+				model.e.make_from_string ("Message length must be greater than zero.")
+			else
+				model.m.set_message_preview (n)
+			end
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

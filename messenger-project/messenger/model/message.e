@@ -42,7 +42,6 @@ feature --queries
 			Result.append (", group: ")
 			Result.append (group.out)
 			Result.append (", content: %"")
-			--Result.append (content)
 			if content.count <= messenger.message_length then
 				Result.append (content)
 			else
