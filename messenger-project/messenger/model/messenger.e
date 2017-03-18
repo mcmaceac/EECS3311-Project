@@ -110,6 +110,7 @@ feature -- commands
 		end
 
 	set_message_preview (length: INTEGER_64)
+		--sets the preview length of all messages in the messenger to length
 		do
 			message_length := length
 		end
@@ -138,6 +139,38 @@ feature -- queries
 				Result.append ("      ")
 				Result.append (all_messages.item_for_iteration.out)
 				all_messages.forth
+			end
+		end
+
+	message_status: STRING
+		--lists the message status for each message and each user
+		do
+			create Result.make_empty
+			across all_messages as am
+			loop
+				across users as u
+				loop
+					if u.item.id = am.item.sender then
+						Result.append ("      (")
+						Result.append (u.item.id.out)
+						Result.append (", ")
+						Result.append (am.item.number.out)
+						Result.append (")->read%N")
+					else if not registration_exists (u.item.id, am.item.group) then
+						Result.append ("      (")
+						Result.append (u.item.id.out)
+						Result.append (", ")
+						Result.append (am.item.number.out)
+						Result.append (")->unavailable%N")
+					else
+						Result.append ("      (")
+						Result.append (u.item.id.out)
+						Result.append (", ")
+						Result.append (am.item.number.out)
+						Result.append (")->unread%N")
+					end
+					end
+				end
 			end
 		end
 

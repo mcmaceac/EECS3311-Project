@@ -18,7 +18,7 @@ feature -- command
 			model.default_update
 
 			if n <= 0 then
-				model.e.make_from_string ("Message length must be greater than zero.")
+				model.e.make_from_string ("  Message length must be greater than zero.%N")
 			else
 				model.m.set_message_preview (n)
 			end

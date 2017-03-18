@@ -74,6 +74,7 @@ feature -- queries
 				Result.append ("  All messages:%N")
 				Result.append (m.list_all_messages)
 				Result.append ("  Message state:%N")
+				Result.append (m.message_status)
 			end
 			end
 			end
