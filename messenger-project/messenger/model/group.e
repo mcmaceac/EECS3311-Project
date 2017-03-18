@@ -20,12 +20,14 @@ feature --creation
 			name := l_name
 			id := l_id
 			messenger := l_m
+			create subscribers.make
 		end
 
 feature --attributes
 	name: STRING
 	id: INTEGER_64
 	messenger: MESSENGER
+	subscribers: LINKED_LIST[USER]
 
 feature --queries
 	out: STRING
@@ -34,6 +36,19 @@ feature --queries
 			Result.append (id.out)
 			Result.append ("->")
 			Result.append (name)
+		end
+
+feature --commands
+	subscribe (u: USER)
+	--subscribe user u to this group
+		do
+			subscribers.force (u)
+		end
+
+	broadcast_message (message: STRING)
+	--broadcast a message sent to this group to all of the subscribers	
+		do
+			
 		end
 
 feature --comparable

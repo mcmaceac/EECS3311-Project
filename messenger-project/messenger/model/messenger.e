@@ -13,9 +13,11 @@ feature {NONE} -- private attributes
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
+	all_messages: LINKED_LIST[TUPLE[m_number: INTEGER_64; sender: INTEGER_64; group: INTEGER_64; content: STRING]]
 
 feature -- attributes
 
+	message_number: INTEGER_64
 	sort_by_id: BOOLEAN
 
 	num_users: INTEGER_64
@@ -33,6 +35,8 @@ feature -- creation
 		do
 			create users.make
 			create groups.make
+			create all_messages.make
+			message_number := 1
 		end
 
 feature -- commands
@@ -63,8 +67,10 @@ feature -- commands
 
 	register_user (uid: INTEGER_64; gid: INTEGER_64)
 		require
+			uid > 0 and gid > 0
 			user_id_exists (uid)
 			group_id_exists (gid)
+			not registration_exists (uid, gid)
 		do
 			across users as u
 			loop
@@ -73,10 +79,31 @@ feature -- commands
 					loop
 						if g.item.id = gid then
 							u.item.register (g.item)
+							g.item.subscribe (u.item)
 						end
 					end
 				end
 			end
+		end
+
+	send_message (uid: INTEGER_64; gid: INTEGER_64; txt: STRING)
+		require
+			uid > 0 and gid > 0
+			user_id_exists (uid)
+			group_id_exists (gid)
+			no_empty_message: not txt.is_empty
+			authorization: registration_exists (uid, gid)
+		local
+			l_m: TUPLE[INTEGER_64, INTEGER_64, INTEGER_64, STRING]
+		do
+			l_m := [message_number, uid, gid, txt]
+			across groups as g
+			loop
+				if g.item.id = gid then
+					g.item.broadcast_message (txt)
+				end
+			end
+			all_messages.force (l_m)
 		end
 
 feature -- queries
@@ -89,6 +116,24 @@ feature -- queries
 	group_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across groups as g some g.item.id = id end
+		end
+
+	list_all_messages: STRING
+		--lists all of the messages sent
+		do
+			create Result.make_empty
+--			across all_messages as a
+--			all
+--				Result.append ("      ")
+--				Result.append (a.item[1].out)
+--				Result.append ("->[sender: ")
+--				Result.append (a.item[2].out)
+--				Result.append (", group: ")
+--				Result.append (a.item[3].out)
+--				Result.append (", content: %"")
+--				Result.append (a.item[4].out)
+--				Result.append ("...%"]")
+--			end
 		end
 
 	list_users_by_id: STRING
