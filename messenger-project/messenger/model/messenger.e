@@ -159,7 +159,7 @@ feature -- queries
 			across users as u
 			loop
 				if u.item.id = id then
-					Result := u.item.no_new_message
+					Result := u.item.new_messages.count = 0
 				end
 			end
 		end
@@ -169,7 +169,7 @@ feature -- queries
 			across users as u
 			loop
 				if u.item.id = id then
-					Result := u.item.no_old_message
+					Result := u.item.old_messages.count = 0
 				end
 			end
 		end
@@ -221,42 +221,27 @@ feature -- queries
 		--lists the message status for each message and each user
 		do
 			create Result.make_empty
-			from
-				all_messages.start
-			until
-				all_messages.after
+			across all_messages as am
 			loop
-				from
-					users.start
-				until
-					users.after
+				across users as u
 				loop
-					if users.item_for_iteration.registered then
-						if users.item.id = all_messages.item.sender or
-						   users.item.message_status.at (all_messages.item.number) then
-							Result.append ("      (")
-							Result.append (users.item.id.out)
-							Result.append (", ")
-							Result.append (all_messages.item.number.out)
+					if u.item.registered then
+						Result.append ("      (")
+						Result.append (u.item.id.out)
+						Result.append (", ")
+						Result.append (am.item.number.out)
+
+						if u.item.id = am.item.sender or
+						   u.item.message_status.at (am.item.number) then
 							Result.append (")->read%N")
-						else if not registration_exists (users.item.id, all_messages.item.group) then
-							Result.append ("      (")
-							Result.append (users.item.id.out)
-							Result.append (", ")
-							Result.append (all_messages.item.number.out)
+						else if not registration_exists (u.item.id, am.item.group) then
 							Result.append (")->unavailable%N")
 						else
-							Result.append ("      (")
-							Result.append (users.item.id.out)
-							Result.append (", ")
-							Result.append (all_messages.item.number.out)
 							Result.append (")->unread%N")
 						end
 						end
 					end
-					users.forth
 				end
-				all_messages.forth
 			end
 		end
 
@@ -357,6 +342,21 @@ feature -- queries
 					Result.append ("%N")
 				end
 				users.forth
+			end
+		end
+
+	old_message_exists (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					across u.item.old_messages as om
+					loop
+						if om.item.number = mid then
+							Result := true
+						end
+					end
+				end
 			end
 		end
 

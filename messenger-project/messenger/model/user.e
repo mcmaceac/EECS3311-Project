@@ -73,7 +73,13 @@ feature --commands
 
 	delete_message (mid: INTEGER_64)
 		do
-
+			across messages as m
+			loop
+				if m.item.number = mid then
+					messages.remove
+					message_status.remove (mid)
+				end
+			end
 		end
 
 	read_message (mid: INTEGER_64)
@@ -189,11 +195,6 @@ feature --queries
 		--is this user a member of group with id gid?
 		do
 			Result := across groups as g some g.item.id = gid end
-		end
-
-	message_read (mid: INTEGER_64): BOOLEAN
-		do
-			Result := message_status.at (mid)
 		end
 
 feature --comparable
