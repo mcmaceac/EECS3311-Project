@@ -76,7 +76,7 @@ feature --commands
 			across messages as m
 			loop
 				if m.item.number = mid then
-					messages.remove
+					messages.prune (m.item)
 					message_status.remove (mid)
 				end
 			end
@@ -110,6 +110,12 @@ feature --commands
 feature --queries
 
 	authorized_to_access_message (mid: INTEGER_64): BOOLEAN
+		do
+			Result := across messages as m some m.item.number = mid end
+		end
+
+	has_message (mid: INTEGER_64): BOOLEAN
+		--checks if this user has a message with mid
 		do
 			Result := across messages as m some m.item.number = mid end
 		end

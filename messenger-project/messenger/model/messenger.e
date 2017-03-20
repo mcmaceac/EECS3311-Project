@@ -231,14 +231,15 @@ feature -- queries
 						Result.append (", ")
 						Result.append (am.item.number.out)
 
-						if u.item.id = am.item.sender or
-						   u.item.message_status.at (am.item.number) then
-							Result.append (")->read%N")
-						else if not registration_exists (u.item.id, am.item.group) then
-							Result.append (")->unavailable%N")
+						if u.item.has_message (am.item.number) then
+							if u.item.id = am.item.sender or
+						   		u.item.message_status.at (am.item.number) then
+								Result.append (")->read%N")
+							else
+								Result.append (")->unread%N")
+							end
 						else
-							Result.append (")->unread%N")
-						end
+							Result.append (")->unavailable%N")
 						end
 					end
 				end
