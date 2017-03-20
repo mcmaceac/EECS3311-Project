@@ -131,14 +131,10 @@ feature -- queries
 		--lists all of the messages sent
 		do
 			create Result.make_empty
-			from
-				all_messages.start
-			until
-				all_messages.after
+			across all_messages as am
 			loop
 				Result.append ("      ")
-				Result.append (all_messages.item_for_iteration.out)
-				all_messages.forth
+				Result.append (am.item.out)
 			end
 		end
 
@@ -146,31 +142,41 @@ feature -- queries
 		--lists the message status for each message and each user
 		do
 			create Result.make_empty
-			across all_messages as am
+			from
+				all_messages.start
+			until
+				all_messages.after
 			loop
-				across users as u
+				from
+					users.start
+				until
+					users.after
 				loop
-					if u.item.id = am.item.sender then
-						Result.append ("      (")
-						Result.append (u.item.id.out)
-						Result.append (", ")
-						Result.append (am.item.number.out)
-						Result.append (")->read%N")
-					else if not registration_exists (u.item.id, am.item.group) then
-						Result.append ("      (")
-						Result.append (u.item.id.out)
-						Result.append (", ")
-						Result.append (am.item.number.out)
-						Result.append (")->unavailable%N")
-					else
-						Result.append ("      (")
-						Result.append (u.item.id.out)
-						Result.append (", ")
-						Result.append (am.item.number.out)
-						Result.append (")->unread%N")
+					if users.item_for_iteration.registered then
+						if users.item.id = all_messages.item.sender then
+							Result.append ("      (")
+							Result.append (users.item.id.out)
+							Result.append (", ")
+							Result.append (all_messages.item.number.out)
+							Result.append (")->read%N")
+						else if not registration_exists (users.item.id, all_messages.item.group) then
+							Result.append ("      (")
+							Result.append (users.item.id.out)
+							Result.append (", ")
+							Result.append (all_messages.item.number.out)
+							Result.append (")->unavailable%N")
+						else
+							Result.append ("      (")
+							Result.append (users.item.id.out)
+							Result.append (", ")
+							Result.append (all_messages.item.number.out)
+							Result.append (")->unread%N")
+						end
+						end
 					end
-					end
+					users.forth
 				end
+				all_messages.forth
 			end
 		end
 

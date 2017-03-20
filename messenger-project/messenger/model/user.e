@@ -29,6 +29,11 @@ feature --attributes
 	messenger: MESSENGER
 	groups: SORTED_TWO_WAY_LIST[GROUP]
 
+	registered: BOOLEAN
+		do
+			Result := not groups.is_empty
+		end
+
 feature --commands
 	register (g: GROUP) --register this user to group g
 		do
