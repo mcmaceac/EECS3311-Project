@@ -69,6 +69,16 @@ feature -- commands
 			groups.force (l_group)
 		end
 
+	delete_message (uid: INTEGER_64; mid: INTEGER_64)
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					u.item.delete_message (mid)
+				end
+			end
+		end
+
 	register_user (uid: INTEGER_64; gid: INTEGER_64)
 		require
 			uid > 0 and gid > 0
@@ -259,6 +269,7 @@ feature -- queries
 				end
 			end
 		end
+
 
 	list_users_by_id: STRING
 		--lists the users in order of their id

@@ -33,6 +33,28 @@ feature --attributes
 	messages: SORTED_TWO_WAY_LIST[MESSAGE]
 	message_status: HASH_TABLE[BOOLEAN, INTEGER_64] --message id to read status for this user
 
+	old_messages: SORTED_TWO_WAY_LIST[MESSAGE]
+		do
+			create Result.make
+			across messages as m
+			loop
+				if message_status.at (m.item.number) then
+					Result.force (m.item)
+				end
+			end
+		end
+
+	new_messages: SORTED_TWO_WAY_LIST[MESSAGE]
+		do
+			create Result.make
+			across messages as m
+			loop
+				if not message_status.at (m.item.number) then
+					Result.force (m.item)
+				end
+			end
+		end
+
 	registered: BOOLEAN
 		do
 			Result := not groups.is_empty
@@ -43,10 +65,15 @@ feature --commands
 		do
 			messages.force (m)
 			if m.sender = id then --this user sent this message
-				message_status.force (true, m.number)			--true means the message has been read
+				message_status.force (true, m.number)			--true means the message has been read 1
 			else
-				message_status.force (false, m.number)			--false means thae message has not been read
+				message_status.force (false, m.number)			--false means the message has not been read
 			end
+		end
+
+	delete_message (mid: INTEGER_64)
+		do
+
 		end
 
 	read_message (mid: INTEGER_64)
@@ -83,18 +110,12 @@ feature --queries
 
 	no_new_message: BOOLEAN
 		do
-			Result := messages.is_empty or across messages as m
-			all
-				message_status.at (m.item.number)
-			end
+			Result := new_messages.count = 0
 		end
 
 	no_old_message: BOOLEAN
 		do
-			Result := messages.is_empty or across messages as m
-			all
-				not message_status.at (m.item.number)
-			end
+			Result := old_messages.count = 0
 		end
 
 	out: STRING
@@ -113,12 +134,10 @@ feature --queries
 			Result.append (", ")
 			Result.append (name)
 			Result.append ("]:%N")
-			across messages as m
+			across new_messages as m
 			loop
-				if not message_status.at (m.item.number) then  	--this message has not been read
-					Result.append ("      ")
-					Result.append (m.item.out)
-				end
+				Result.append ("      ")
+				Result.append (m.item.out)
 			end
 		end
 
@@ -130,12 +149,10 @@ feature --queries
 			Result.append (", ")
 			Result.append (name)
 			Result.append ("]:%N")
-			across messages as m
+			across old_messages as m
 			loop
-				if message_status.at (m.item.number) then		--this message has been read already
-					Result.append ("      ")
-					Result.append (m.item.out)
-				end
+				Result.append ("      ")
+				Result.append (m.item.out)
 			end
 		end
 
@@ -172,6 +189,11 @@ feature --queries
 		--is this user a member of group with id gid?
 		do
 			Result := across groups as g some g.item.id = gid end
+		end
+
+	message_read (mid: INTEGER_64): BOOLEAN
+		do
+			Result := message_status.at (mid)
 		end
 
 feature --comparable
