@@ -129,6 +129,16 @@ feature -- commands
 
 feature -- queries
 
+	user_authorized_to_access_message (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.authorized_to_access_message (mid)
+				end
+			end
+		end
+
 	user_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across users as u some u.item.id = id end
@@ -157,6 +167,11 @@ feature -- queries
 	group_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across groups as g some g.item.id = id end
+		end
+
+	message_id_exists (id: INTEGER_64): BOOLEAN
+		do
+			Result := across all_messages as am some am.item.number = id end
 		end
 
 	list_all_messages: STRING
@@ -208,7 +223,7 @@ feature -- queries
 				loop
 					if users.item_for_iteration.registered then
 						if users.item.id = all_messages.item.sender or
-						   users.item.message_status.at (all_messages.item.number)then
+						   users.item.message_status.at (all_messages.item.number) then
 							Result.append ("      (")
 							Result.append (users.item.id.out)
 							Result.append (", ")
@@ -232,6 +247,16 @@ feature -- queries
 					users.forth
 				end
 				all_messages.forth
+			end
+		end
+
+	message_read (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.message_status.at (mid)
+				end
 			end
 		end
 

@@ -75,6 +75,12 @@ feature --commands
 		end
 
 feature --queries
+
+	authorized_to_access_message (mid: INTEGER_64): BOOLEAN
+		do
+			Result := across messages as m some m.item.number = mid end
+		end
+
 	no_new_message: BOOLEAN
 		do
 			Result := messages.is_empty or across messages as m
