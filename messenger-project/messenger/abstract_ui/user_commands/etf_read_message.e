@@ -6,18 +6,20 @@ note
 
 class
 	ETF_READ_MESSAGE
-inherit 
+inherit
 	ETF_READ_MESSAGE_INTERFACE
 		redefine read_message end
 create
 	make
-feature -- command 
+feature -- command
 	read_message(uid: INTEGER_64 ; mid: INTEGER_64)
-		require else 
+		require else
 			read_message_precond(uid, mid)
     	do
 			-- perform some update on the model state
 			model.default_update
+
+			model.m.read_message (uid, mid)
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

@@ -49,6 +49,26 @@ feature --commands
 			end
 		end
 
+	read_message (mid: INTEGER_64)
+		do
+			message_status.force (true, mid) --changing the message_status to read
+			across messages as m
+			loop
+				if m.item.number = mid then
+					messenger.message_to_read.make_empty
+					messenger.message_to_read.append ("  Message for user [")
+					messenger.message_to_read.append (id.out)
+					messenger.message_to_read.append (", ")
+					messenger.message_to_read.append (name)
+					messenger.message_to_read.append ("]: [")
+					messenger.message_to_read.append (mid.out)
+					messenger.message_to_read.append (", %"")
+					messenger.message_to_read.append (m.item.content)
+					messenger.message_to_read.append ("%"]%N")
+				end
+			end
+		end
+
 	register (g: GROUP) --register this user to group g
 		do
 			groups.force (g)
@@ -57,7 +77,7 @@ feature --commands
 feature --queries
 	no_new_message: BOOLEAN
 		do
-			Result := across messages as m
+			Result := messages.is_empty or across messages as m
 			all
 				message_status.at (m.item.number)
 			end
@@ -65,7 +85,7 @@ feature --queries
 
 	no_old_message: BOOLEAN
 		do
-			Result := across messages as m
+			Result := messages.is_empty or across messages as m
 			all
 				not message_status.at (m.item.number)
 			end

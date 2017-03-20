@@ -62,6 +62,21 @@ feature -- queries
 				Result.append (":  OK%N")
 				Result.append (message)
 				message.wipe_out				--clearing the message
+			else if m.message_to_read.count > 0 then
+				Result.append (i.out)
+				Result.append (":  OK%N")
+				Result.append (m.message_to_read)
+				Result.append ("  Users:%N")
+				Result.append (m.list_users_by_id)
+				Result.append ("  Groups:%N")
+				Result.append (m.list_groups_by_id)
+				Result.append ("  Registrations:%N")
+				Result.append (m.list_registrations)
+				Result.append ("  All messages:%N")
+				Result.append (m.list_all_messages)
+				Result.append ("  Message state:%N")
+				Result.append (m.message_status)
+				m.message_to_read.wipe_out
 			else
 				Result.append (i.out)
 				Result.append (":  OK%N")
@@ -75,6 +90,7 @@ feature -- queries
 				Result.append (m.list_all_messages)
 				Result.append ("  Message state:%N")
 				Result.append (m.message_status)
+			end
 			end
 			end
 			end

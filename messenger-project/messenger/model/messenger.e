@@ -17,6 +17,7 @@ feature {NONE} -- private attributes
 
 feature -- attributes
 
+	message_to_read: STRING
 	message_number: INTEGER_64
 	message_length: INTEGER_64
 	sort_by_id: BOOLEAN
@@ -34,6 +35,7 @@ feature -- attributes
 feature -- creation
 	make
 		do
+			create message_to_read.make_empty
 			create users.make
 			create groups.make
 			create all_messages.make
@@ -88,6 +90,16 @@ feature -- commands
 			end
 		end
 
+	read_message (uid: INTEGER_64; mid: INTEGER_64)
+		do
+			across users as u
+			loop
+				if u.item.id = uid then
+					u.item.read_message (mid)
+				end
+			end
+		end
+
 	send_message (uid: INTEGER_64; gid: INTEGER_64; txt: STRING)
 		require
 			uid > 0 and gid > 0
@@ -135,7 +147,7 @@ feature -- queries
 	user_no_old_message (id: INTEGER_64): BOOLEAN
 		do
 			across users as u
-			loop  
+			loop
 				if u.item.id = id then
 					Result := u.item.no_old_message
 				end
@@ -195,7 +207,8 @@ feature -- queries
 					users.after
 				loop
 					if users.item_for_iteration.registered then
-						if users.item.id = all_messages.item.sender then
+						if users.item.id = all_messages.item.sender or
+						   users.item.message_status.at (all_messages.item.number)then
 							Result.append ("      (")
 							Result.append (users.item.id.out)
 							Result.append (", ")
