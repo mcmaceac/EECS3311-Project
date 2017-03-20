@@ -43,9 +43,9 @@ feature --commands
 		do
 			messages.force (m)
 			if m.sender = id then --this user sent this message
-				message_status.force (true, m.number)
+				message_status.force (true, m.number)			--true means the message has been read
 			else
-				message_status.force (false, m.number)
+				message_status.force (false, m.number)			--false means thae message has not been read
 			end
 		end
 
@@ -58,7 +58,7 @@ feature --queries
 	no_new_message: BOOLEAN
 		do
 			Result := across messages as m
-			some
+			all
 				message_status.at (m.item.number)
 			end
 		end
