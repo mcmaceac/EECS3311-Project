@@ -55,6 +55,14 @@ feature --commands
 		end
 
 feature --queries
+	no_new_message: BOOLEAN
+		do
+			Result := across messages as m
+			some
+				message_status.at (m.item.number.as_integer_32)
+			end
+		end
+
 	out: STRING
 		do
 			create Result.make_empty

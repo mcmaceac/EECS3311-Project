@@ -122,6 +122,16 @@ feature -- queries
 			Result := across users as u some u.item.id = id end
 		end
 
+	user_no_new_message (id: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop
+				if u.item.id = id then
+					Result := u.item.no_new_message
+				end
+			end
+		end
+
 	group_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across groups as g some g.item.id = id end
