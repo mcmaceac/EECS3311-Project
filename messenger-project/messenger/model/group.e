@@ -45,10 +45,13 @@ feature --commands
 			subscribers.force (u)
 		end
 
-	broadcast_message (message: STRING)
+	broadcast_message (m: MESSAGE)
 	--broadcast a message sent to this group to all of the subscribers	
 		do
-			
+			across subscribers as s
+			loop
+				s.item.add_message (m)
+			end
 		end
 
 feature --comparable

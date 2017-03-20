@@ -21,6 +21,8 @@ feature --creation
 			id := l_id
 			messenger := l_m
 			create groups.make
+			create messages.make
+			create message_status.make (0)
 		end
 
 feature --attributes
@@ -28,6 +30,8 @@ feature --attributes
 	id: INTEGER_64
 	messenger: MESSENGER
 	groups: SORTED_TWO_WAY_LIST[GROUP]
+	messages: SORTED_TWO_WAY_LIST[MESSAGE]
+	message_status: HASH_TABLE[BOOLEAN, INTEGER] --message id to read status for this user
 
 	registered: BOOLEAN
 		do
@@ -35,6 +39,16 @@ feature --attributes
 		end
 
 feature --commands
+	add_message (m: MESSAGE)
+		do
+			messages.force (m)
+			if m.sender = id then --this user sent this message
+				message_status.force (true, m.number.as_integer_32)
+			else
+				message_status.force (false, m.number.as_integer_32)
+			end
+		end
+
 	register (g: GROUP) --register this user to group g
 		do
 			groups.force (g)
@@ -48,6 +62,24 @@ feature --queries
 			Result.append ("->")
 			Result.append (name)
 		end
+
+	list_new_messages: STRING
+		do
+			create Result.make_empty
+			Result.append ("  New/unread messages for user [")
+			Result.append (id.out)
+			Result.append (", ")
+			Result.append (name)
+			Result.append ("]:%N")
+			across messages as m
+			loop
+				if not message_status.at (m.item.number.as_integer_32) then
+					Result.append ("      ")
+					Result.append (m.item.out)
+				end
+			end
+		end
+
 	list_registrations: STRING
 		do
 			create Result.make_empty

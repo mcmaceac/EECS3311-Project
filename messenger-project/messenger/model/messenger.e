@@ -103,7 +103,7 @@ feature -- commands
 			across groups as g
 			loop
 				if g.item.id = gid then
-					g.item.broadcast_message (txt)
+					g.item.broadcast_message (l_m)
 				end
 			end
 			all_messages.force (l_m)
@@ -135,6 +135,17 @@ feature -- queries
 			loop
 				Result.append ("      ")
 				Result.append (am.item.out)
+			end
+		end
+
+	list_new_messages (uid: INTEGER_64): STRING
+		do
+			create Result.make_empty
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.list_new_messages
+				end
 			end
 		end
 

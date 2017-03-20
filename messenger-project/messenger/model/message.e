@@ -8,7 +8,7 @@ class
 	MESSAGE
 
 inherit
-	ANY
+	COMPARABLE
 		redefine
 			out
 		end
@@ -33,6 +33,11 @@ feature --attributes
 	messenger: MESSENGER
 
 feature --queries
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := number < other.number
+		end
+
 	out: STRING
 		do
 			create Result.make_empty
