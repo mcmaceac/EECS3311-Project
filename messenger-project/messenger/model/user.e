@@ -31,7 +31,7 @@ feature --attributes
 	messenger: MESSENGER
 	groups: SORTED_TWO_WAY_LIST[GROUP]
 	messages: SORTED_TWO_WAY_LIST[MESSAGE]
-	message_status: HASH_TABLE[BOOLEAN, INTEGER] --message id to read status for this user
+	message_status: HASH_TABLE[BOOLEAN, INTEGER_64] --message id to read status for this user
 
 	registered: BOOLEAN
 		do
@@ -43,9 +43,9 @@ feature --commands
 		do
 			messages.force (m)
 			if m.sender = id then --this user sent this message
-				message_status.force (true, m.number.as_integer_32)
+				message_status.force (true, m.number)
 			else
-				message_status.force (false, m.number.as_integer_32)
+				message_status.force (false, m.number)
 			end
 		end
 
@@ -59,7 +59,15 @@ feature --queries
 		do
 			Result := across messages as m
 			some
-				message_status.at (m.item.number.as_integer_32)
+				message_status.at (m.item.number)
+			end
+		end
+
+	no_old_message: BOOLEAN
+		do
+			Result := across messages as m
+			all
+				not message_status.at (m.item.number)
 			end
 		end
 
@@ -81,7 +89,24 @@ feature --queries
 			Result.append ("]:%N")
 			across messages as m
 			loop
-				if not message_status.at (m.item.number.as_integer_32) then
+				if not message_status.at (m.item.number) then  	--this message has not been read
+					Result.append ("      ")
+					Result.append (m.item.out)
+				end
+			end
+		end
+
+	list_old_messages: STRING
+		do
+			create Result.make_empty
+			Result.append ("  Old/read messages for user [")
+			Result.append (id.out)
+			Result.append (", ")
+			Result.append (name)
+			Result.append ("]:%N")
+			across messages as m
+			loop
+				if message_status.at (m.item.number) then		--this message has been read already
 					Result.append ("      ")
 					Result.append (m.item.out)
 				end

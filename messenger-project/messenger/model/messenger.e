@@ -132,6 +132,16 @@ feature -- queries
 			end
 		end
 
+	user_no_old_message (id: INTEGER_64): BOOLEAN
+		do
+			across users as u
+			loop  
+				if u.item.id = id then
+					Result := u.item.no_old_message
+				end
+			end
+		end
+
 	group_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across groups as g some g.item.id = id end
@@ -155,6 +165,17 @@ feature -- queries
 			loop
 				if u.item.id = uid then
 					Result := u.item.list_new_messages
+				end
+			end
+		end
+
+	list_old_messages (uid: INTEGER_64): STRING
+		do
+			create Result.make_empty
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.list_old_messages
 				end
 			end
 		end
