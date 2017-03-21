@@ -1,0 +1,277 @@
+  0:  OK
+
+->add_user(1,"A")
+  1:  OK
+  Users:
+      1->A
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(5,"Z")
+  2:  OK
+  Users:
+      1->A
+      5->Z
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(6,"B")
+  3:  OK
+  Users:
+      1->A
+      5->Z
+      6->B
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(4,"B")
+  4:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_group(1,"B")
+  5:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+  Registrations:
+  All messages:
+  Message state:
+
+->add_group(10,"A")
+  6:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      10->A
+  Registrations:
+  All messages:
+  Message state:
+
+->add_group(9,"C")
+  7:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+  All messages:
+  Message state:
+
+->register_user(1,1)
+  8:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B}
+  All messages:
+  Message state:
+
+->register_user(1,10)
+  9:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+  All messages:
+  Message state:
+
+->register_user(4,1)
+  10:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+  All messages:
+  Message state:
+
+->register_user(0,0)
+  11:  ERROR 
+  ID must be a positive integer.
+
+->register_user(5,9)
+  12:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+      [5, Z]->{9->C}
+  All messages:
+  Message state:
+
+->send_message(1,10,"one")
+  13:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+      [5, Z]->{9->C}
+  All messages:
+      1->[sender: 1, group: 10, content: "one"]
+  Message state:
+      (1, 1)->read
+      (4, 1)->unavailable
+      (5, 1)->unavailable
+
+->send_message(1,1,"two: testing long message with more than 15 characters")
+  14:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+      [5, Z]->{9->C}
+  All messages:
+      1->[sender: 1, group: 10, content: "one"]
+      2->[sender: 1, group: 1, content: "two: testing lo..."]
+  Message state:
+      (1, 1)->read
+      (4, 1)->unavailable
+      (5, 1)->unavailable
+      (1, 2)->read
+      (4, 2)->unread
+      (5, 2)->unavailable
+
+->send_message(1,9,"three")
+  15:  ERROR 
+  User not authorized to send messages to the specified group.
+
+->list_new_messages(4)
+  16:  OK
+  New/unread messages for user [4, B]:
+      2->[sender: 1, group: 1, content: "two: testing lo..."]
+
+->list_new_messages(1)
+  17:  OK
+  There are no new messages for this user.
+
+->list_old_messages(1)
+  18:  OK
+  Old/read messages for user [1, A]:
+      1->[sender: 1, group: 10, content: "one"]
+      2->[sender: 1, group: 1, content: "two: testing lo..."]
+
+->read_message(4,2)
+  19:  OK
+  Message for user [4, B]: [2, "two: testing long message with more than 15 characters"]
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+      [5, Z]->{9->C}
+  All messages:
+      1->[sender: 1, group: 10, content: "one"]
+      2->[sender: 1, group: 1, content: "two: testing lo..."]
+  Message state:
+      (1, 1)->read
+      (4, 1)->unavailable
+      (5, 1)->unavailable
+      (1, 2)->read
+      (4, 2)->read
+      (5, 2)->unavailable
+
+->delete_message(1,1)
+  20:  OK
+  Users:
+      1->A
+      4->B
+      5->Z
+      6->B
+  Groups:
+      1->B
+      9->C
+      10->A
+  Registrations:
+      [1, A]->{1->B, 10->A}
+      [4, B]->{1->B}
+      [5, Z]->{9->C}
+  All messages:
+      1->[sender: 1, group: 10, content: "one"]
+      2->[sender: 1, group: 1, content: "two: testing lo..."]
+  Message state:
+      (1, 1)->unavailable
+      (4, 1)->unavailable
+      (5, 1)->unavailable
+      (1, 2)->read
+      (4, 2)->read
+      (5, 2)->unavailable
+

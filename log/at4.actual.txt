@@ -1,0 +1,82 @@
+  0:  OK
+
+->add_user(1,"Bob")
+  1:  OK
+  Users:
+      1->Bob
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(2,"Dave")
+  2:  OK
+  Users:
+      1->Bob
+      2->Dave
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_group(1,"Doctors")
+  3:  OK
+  Users:
+      1->Bob
+      2->Dave
+  Groups:
+      1->Doctors
+  Registrations:
+  All messages:
+  Message state:
+
+->register_user(1,1)
+  4:  OK
+  Users:
+      1->Bob
+      2->Dave
+  Groups:
+      1->Doctors
+  Registrations:
+      [1, Bob]->{1->Doctors}
+  All messages:
+  Message state:
+
+->send_message(1,1,"hi")
+  5:  OK
+  Users:
+      1->Bob
+      2->Dave
+  Groups:
+      1->Doctors
+  Registrations:
+      [1, Bob]->{1->Doctors}
+  All messages:
+      1->[sender: 1, group: 1, content: "hi"]
+  Message state:
+      (1, 1)->read
+
+->read_message(2,1)
+  6:  ERROR 
+  User not authorized to access this message.
+
+->register_user(2,1)
+  7:  OK
+  Users:
+      1->Bob
+      2->Dave
+  Groups:
+      1->Doctors
+  Registrations:
+      [1, Bob]->{1->Doctors}
+      [2, Dave]->{1->Doctors}
+  All messages:
+      1->[sender: 1, group: 1, content: "hi"]
+  Message state:
+      (1, 1)->read
+      (2, 1)->unavailable
+
+->read_message(2,1)
+  8:  ERROR 
+  User not authorized to access this message.
+
