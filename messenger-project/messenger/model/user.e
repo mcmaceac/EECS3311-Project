@@ -72,14 +72,17 @@ feature --commands
 		end
 
 	delete_message (mid: INTEGER_64)
+		local
+			l_l: SORTED_TWO_WAY_LIST[MESSAGE]
 		do
+			create l_l.make
 			across messages as m
 			loop
-				if m.item.number = mid then
-					messages.prune (m.item)
-					message_status.remove (mid)
+				if m.item.number /= mid then
+					l_l.force (m.item)
 				end
 			end
+			messages := l_l
 		end
 
 	read_message (mid: INTEGER_64)
