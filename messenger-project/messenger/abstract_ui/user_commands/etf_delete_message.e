@@ -26,7 +26,7 @@ feature -- command
 			else if not model.m.message_id_exists (mid) then
 				model.e.make_from_string ("  Message with this ID does not exist.%N")
 			else if not model.m.old_message_exists (uid, mid)  then
-				model.e.make_from_string ("  Message with this ID not found in old/read messages.")
+				model.e.make_from_string ("  Message with this ID not found in old/read messages.%N")
 			else
 				model.m.delete_message (uid, mid)
 			end

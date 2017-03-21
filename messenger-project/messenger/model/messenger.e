@@ -48,7 +48,7 @@ feature -- commands
 	add_user (id: INTEGER_64; name: STRING)
 		require
 			id_positive: id > 0
-			first_letter_alpha: name.count > 0 and name.at (1).is_alpha
+			first_letter_alpha: not (name.count = 0) and name.at (1).is_alpha
 			id_not_in_use: not user_id_exists (id)
 		local
 			l_user: USER
