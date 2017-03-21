@@ -10,6 +10,8 @@ class
 create make
 
 feature {NONE} -- private attributes
+	--we want these attributes to be private so that other clients cannot
+	--gain access to the messages of other users
 
 	users: SORTED_TWO_WAY_LIST[USER]
 	groups: SORTED_TWO_WAY_LIST[GROUP]
@@ -138,16 +140,6 @@ feature -- commands
 		end
 
 feature -- queries
-
-	user_authorized_to_access_message (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
-		do
-			across users as u
-			loop
-				if u.item.id = uid then
-					Result := u.item.authorized_to_access_message (mid)
-				end
-			end
-		end
 
 	user_id_exists (id: INTEGER_64): BOOLEAN
 		do
