@@ -58,7 +58,7 @@
 
 ->read_message(1,1)
   6:  ERROR 
-  User not authorized to access this message.
+  Message has already been read. See `list_old_messages'.
 
 ->list_old_messages(1)
   7:  OK

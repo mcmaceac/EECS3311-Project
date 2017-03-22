@@ -22,6 +22,7 @@ feature --creation
 			messenger := l_m
 			create groups.make
 			create messages.make
+			create deleted_messages.make
 			create message_status.make (0)
 		end
 
@@ -31,6 +32,8 @@ feature --attributes
 	messenger: MESSENGER
 	groups: SORTED_TWO_WAY_LIST[GROUP]
 	messages: SORTED_TWO_WAY_LIST[MESSAGE]
+	deleted_messages: SORTED_TWO_WAY_LIST[MESSAGE]
+
 	message_status: HASH_TABLE[BOOLEAN, INTEGER_64] --message id to read status for this user
 
 	old_messages: SORTED_TWO_WAY_LIST[MESSAGE]
@@ -80,6 +83,8 @@ feature --commands
 			loop
 				if m.item.number /= mid then
 					l_l.force (m.item)
+				else
+					deleted_messages.force (m.item)		--add this message to deleted messages
 				end
 			end
 			messages := l_l
@@ -114,7 +119,8 @@ feature --queries
 
 	authorized_to_access_message (mid: INTEGER_64): BOOLEAN
 		do
-			Result := across messages as m some m.item.number = mid end
+			Result := across messages as m some m.item.number = mid end or
+					  across deleted_messages as m some m.item.number = mid end
 		end
 
 	has_message (mid: INTEGER_64): BOOLEAN
