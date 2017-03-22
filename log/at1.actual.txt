@@ -1061,7 +1061,7 @@
 
 ->delete_message(2,2)
   59:  ERROR 
-  Message with this ID not found in old/read messages.
+  Message with this ID does not exist.
 
 ->send_message(7,2,"As to diseases, make a habit of two things - to help, or at least, to do no harm.")
   60:  OK

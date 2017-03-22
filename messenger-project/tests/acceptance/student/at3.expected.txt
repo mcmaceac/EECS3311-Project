@@ -58,7 +58,7 @@
 
 ->read_message(1,1)
   6:  ERROR 
-  Message has already been read. See `list_old_messages'.
+  Message with this ID unavailable.
 
 ->list_old_messages(1)
   7:  OK

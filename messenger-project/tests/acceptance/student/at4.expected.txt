@@ -78,5 +78,5 @@
 
 ->read_message(2,1)
   8:  ERROR 
-  Message with this ID does not exist.
+  Message with this ID unavailable.
 
