@@ -23,7 +23,7 @@ feature -- command
 				model.e.make_from_string ("  ID must be a positive integer.%N")
 			else if not model.m.user_id_exists (uid) then
 				model.e.make_from_string ("  User with this ID does not exist.%N")
-			else if not model.m.message_id_exists (mid) then
+			else if not model.m.message_id_exists (uid, mid) then
 				model.e.make_from_string ("  Message with this ID does not exist.%N")
 			else if not model.m.old_message_exists (uid, mid)  then
 				model.e.make_from_string ("  Message with this ID not found in old/read messages.%N")

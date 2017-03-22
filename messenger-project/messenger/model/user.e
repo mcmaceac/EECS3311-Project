@@ -212,6 +212,12 @@ feature --queries
 			Result := across groups as g some g.item.id = gid end
 		end
 
+	message_id_exists (mid: INTEGER_64): BOOLEAN
+		do
+			Result := across messages as m some m.item.number = mid end or
+					  across deleted_messages as m some m.item.number = mid  end
+		end
+
 feature --comparable
 	is_less alias "<" (other: like Current): BOOLEAN
 		do

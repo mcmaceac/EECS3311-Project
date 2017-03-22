@@ -78,5 +78,5 @@
 
 ->read_message(2,1)
   8:  ERROR 
-  User not authorized to access this message.
+  Message with this ID does not exist.
 

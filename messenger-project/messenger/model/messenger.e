@@ -181,9 +181,25 @@ feature -- queries
 			Result := across groups as g some g.item.id = id end
 		end
 
-	message_id_exists (id: INTEGER_64): BOOLEAN
+	message_id_exists (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		--check to see if this message id exists for this user
 		do
-			Result := across all_messages as am some am.item.number = id end
+			across users as u
+			loop
+				if u.item.id = uid then
+					Result := u.item.message_id_exists (mid)
+				end
+			end
+			--the below janky logic is needed due to the current state of the
+			--oracle and what error messages are displayed when
+			if not Result and across all_messages as m some m.item.number = mid and registration_exists (uid, m.item.group) end then
+				Result := false
+			else if not Result and across all_messages as m some m.item.number = mid end then
+				Result := true
+			else
+				Result := true
+			end
+			end
 		end
 
 	list_all_messages: STRING
