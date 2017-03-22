@@ -141,6 +141,16 @@ feature -- commands
 
 feature -- queries
 
+	user_authorized_to_access_message (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+ 		do
+ 			across users as u
+ 			loop
+ 				if u.item.id = uid then
+ 					Result := u.item.authorized_to_access_message (mid)
+ 				end
+ 			end
+ 		end
+
 	user_id_exists (id: INTEGER_64): BOOLEAN
 		do
 			Result := across users as u some u.item.id = id end
