@@ -264,13 +264,57 @@ feature -- queries
 			end
 		end
 
+	message_deleted (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		do
+			from
+				users.start
+			until
+				users.after or Result
+			loop
+				if users.item.id = uid then
+					Result := users.item.message_deleted (mid)
+				end
+				users.forth
+			end
+		end
+
+	user_member_of_group (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		do
+			from
+				users.start
+			until
+				users.after or Result
+			loop
+				if users.item.id = uid then
+					across all_messages as am
+					loop
+						if am.item.number = mid then
+							Result := users.item.member_of (am.item.group)
+						end
+					end
+				end
+				users.forth
+			end
+		end
+
 	message_read (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
 		do
-			across users as u
+--			across users as u
+--			loop
+--				if u.item.id = uid then
+--					Result := u.item.message_status.at (mid)
+--				end
+--			end
+
+			from
+				users.start
+			until
+				users.after or Result
 			loop
-				if u.item.id = uid then
-					Result := u.item.message_status.at (mid)
+				if users.item.id = uid then
+					Result := users.item.message_status.at (mid)
 				end
+				users.forth
 			end
 		end
 

@@ -28,7 +28,7 @@ log_dir = "../log"
 
 acceptance_tests = 
     [ "../messenger-project/tests/acceptance/instructor/at1.txt",
-      "../messenger-project/tests/acceptance/student/at2.txt", 
-      "../messenger-project/tests/acceptance/student/at3.txt", 
+      "../messenger-project/tests/acceptance/student/at2.txt",
+      "../messenger-project/tests/acceptance/student/at3.txt",
       "../messenger-project/tests/acceptance/student/at4.txt"
     ]

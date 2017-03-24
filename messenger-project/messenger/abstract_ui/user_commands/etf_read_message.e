@@ -23,6 +23,8 @@ feature -- command
 				model.e.make_from_string ("  ID must be a positive integer.%N")
 			else if not model.m.user_id_exists (uid) then
 				model.e.make_from_string ("  User with this ID does not exist.%N")
+			else if model.m.message_deleted (uid, mid) or (not model.m.message_id_exists (uid, mid) and model.m.user_member_of_group (uid, mid)) then
+				model.e.make_from_string ("  Message with this ID unavailable.%N")
 			else if not model.m.message_id_exists (uid, mid) then
 				model.e.make_from_string ("  Message with this ID does not exist.%N")
 			else if not model.m.user_authorized_to_access_message (uid, mid) then
@@ -31,6 +33,7 @@ feature -- command
 				model.e.make_from_string ("  Message has already been read. See `list_old_messages'.%N")
 			else
 				model.m.read_message (uid, mid)
+			end
 			end
 			end
 			end

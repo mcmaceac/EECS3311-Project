@@ -1,0 +1,7 @@
+add_user(1,"Danny")
+add_group(1,"The 3311 Bug Hunting Group")
+register_user(1,1)
+send_message(1,1,"This message will be deleted soon.")
+delete_message(1,1)
+read_message(1,1)
+list_old_messages(1)

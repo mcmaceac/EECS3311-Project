@@ -1,0 +1,8 @@
+add_user(1,"Bob")
+add_user(2,"Dave")
+add_group(1,"Doctors")
+register_user(1,1)
+send_message(1,1,"hi")
+read_message(2,1)
+register_user(2,1)
+read_message(2,1)

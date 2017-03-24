@@ -218,6 +218,12 @@ feature --queries
 					  across deleted_messages as m some m.item.number = mid  end
 		end
 
+	message_deleted (mid: INTEGER_64): BOOLEAN
+		do
+			Result := across deleted_messages as m some m.item.number = mid  end
+		end
+	
+
 feature --comparable
 	is_less alias "<" (other: like Current): BOOLEAN
 		do
