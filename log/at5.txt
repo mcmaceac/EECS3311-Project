@@ -1,0 +1,4 @@
+add_user(1, "DDos")
+add_user(2, "Dbos")
+list_users
+add_group(10000000000,"long")

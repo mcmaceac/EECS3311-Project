@@ -1,0 +1,37 @@
+  0:  OK
+
+->add_user(1,"DDos")
+  1:  OK
+  Users:
+      1->DDos
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(2,"Dbos")
+  2:  OK
+  Users:
+      1->DDos
+      2->Dbos
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->list_users
+  3:  OK
+  1->DDos
+  2->Dbos
+
+->add_group(10000000000,"long")
+  4:  OK
+  Users:
+      1->DDos
+      2->Dbos
+  Groups:
+      1410065408->long
+  Registrations:
+  All messages:
+  Message state:
+

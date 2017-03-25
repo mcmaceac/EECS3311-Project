@@ -18,3 +18,8 @@ my.exe -b log/at4.txt > log/at4.actual.txt
 messenger.exe -b log/at4.txt > log/at4.expected.txt
 messenger.exe -b log/at4.txt > messenger-project/tests/acceptance/at4.expected.txt
 diff log/at4.actual.txt log/at4.expected.txt
+
+my.exe -b log/at5.txt > log/at5.actual.txt
+messenger.exe -b log/at5.txt > log/at5.expected.txt
+messenger.exe -b log/at5.txt > messenger-project/tests/acceptance/at5.expected.txt
+diff log/at5.actual.txt log/at5.expected.txt
