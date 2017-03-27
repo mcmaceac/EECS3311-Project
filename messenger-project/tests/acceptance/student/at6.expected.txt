@@ -131,6 +131,7 @@
       (1, 1)->read
       (2, 1)->unread
       (3, 1)->unread
+      (4, 1)->unavailable
 
 ->send_message(3,19,"Sending message to wrong group")
   13:  ERROR 
@@ -164,9 +165,11 @@
       (1, 1)->read
       (2, 1)->unread
       (3, 1)->unread
+      (4, 1)->unavailable
       (1, 2)->unread
       (2, 2)->unread
       (3, 2)->read
+      (4, 2)->unavailable
 
 ->read_message(1,2)
   17:  OK
@@ -189,9 +192,11 @@
       (1, 1)->read
       (2, 1)->unread
       (3, 1)->unread
+      (4, 1)->unavailable
       (1, 2)->read
       (2, 2)->unread
       (3, 2)->read
+      (4, 2)->unavailable
 
 ->read_message(3,1)
   18:  OK
@@ -214,9 +219,11 @@
       (1, 1)->read
       (2, 1)->unread
       (3, 1)->read
+      (4, 1)->unavailable
       (1, 2)->read
       (2, 2)->unread
       (3, 2)->read
+      (4, 2)->unavailable
 
 ->read_message(2,1)
   19:  OK
@@ -239,9 +246,11 @@
       (1, 1)->read
       (2, 1)->read
       (3, 1)->read
+      (4, 1)->unavailable
       (1, 2)->read
       (2, 2)->unread
       (3, 2)->read
+      (4, 2)->unavailable
 
 ->list_users
   20:  OK
@@ -278,7 +287,9 @@
       (1, 1)->read
       (2, 1)->read
       (3, 1)->read
+      (4, 1)->unavailable
       (1, 2)->read
       (2, 2)->unread
       (3, 2)->read
+      (4, 2)->unavailable
 

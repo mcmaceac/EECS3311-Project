@@ -176,6 +176,7 @@
       (1, 1)->read
       (4, 1)->unavailable
       (5, 1)->unavailable
+      (6, 1)->unavailable
 
 ->send_message(1,1,"two: testing long message with more than 15 characters")
   14:  OK
@@ -199,9 +200,11 @@
       (1, 1)->read
       (4, 1)->unavailable
       (5, 1)->unavailable
+      (6, 1)->unavailable
       (1, 2)->read
       (4, 2)->unread
       (5, 2)->unavailable
+      (6, 2)->unavailable
 
 ->send_message(1,9,"three")
   15:  ERROR 
@@ -245,9 +248,11 @@
       (1, 1)->read
       (4, 1)->unavailable
       (5, 1)->unavailable
+      (6, 1)->unavailable
       (1, 2)->read
       (4, 2)->read
       (5, 2)->unavailable
+      (6, 2)->unavailable
 
 ->delete_message(1,1)
   20:  OK
@@ -271,7 +276,9 @@
       (1, 1)->unavailable
       (4, 1)->unavailable
       (5, 1)->unavailable
+      (6, 1)->unavailable
       (1, 2)->read
       (4, 2)->read
       (5, 2)->unavailable
+      (6, 2)->unavailable
 
