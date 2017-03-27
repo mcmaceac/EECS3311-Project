@@ -1,0 +1,284 @@
+  0:  OK
+
+->add_user(1,"One")
+  1:  OK
+  Users:
+      1->One
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(2,"Two")
+  2:  OK
+  Users:
+      1->One
+      2->Two
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(3,"Three")
+  3:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_user(4,"Four")
+  4:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+  Registrations:
+  All messages:
+  Message state:
+
+->add_group(10,"Test Group")
+  5:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+  All messages:
+  Message state:
+
+->register_user(1,10)
+  6:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+  All messages:
+  Message state:
+
+->register_user(0,10)
+  7:  ERROR 
+  ID must be a positive integer.
+
+->register_user(0,9)
+  8:  ERROR 
+  ID must be a positive integer.
+
+->register_user(1,9)
+  9:  ERROR 
+  Group with this ID does not exist.
+
+->register_user(2,10)
+  10:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+  All messages:
+  Message state:
+
+->register_user(3,10)
+  11:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+  Message state:
+
+->send_message(1,10,"Testing sending a message")
+  12:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending..."]
+  Message state:
+      (1, 1)->read
+      (2, 1)->unread
+      (3, 1)->unread
+
+->send_message(3,19,"Sending message to wrong group")
+  13:  ERROR 
+  Group with this ID does not exist.
+
+->send_message(0,19,"Sending message from invalid user")
+  14:  ERROR 
+  ID must be a positive integer.
+
+->send_message(4,10,"Not registered")
+  15:  ERROR 
+  User not authorized to send messages to the specified group.
+
+->send_message(3,10,"Valid message send")
+  16:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending..."]
+      2->[sender: 3, group: 10, content: "Valid message s..."]
+  Message state:
+      (1, 1)->read
+      (2, 1)->unread
+      (3, 1)->unread
+      (1, 2)->unread
+      (2, 2)->unread
+      (3, 2)->read
+
+->read_message(1,2)
+  17:  OK
+  Message for user [1, One]: [2, "Valid message send"]
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending..."]
+      2->[sender: 3, group: 10, content: "Valid message s..."]
+  Message state:
+      (1, 1)->read
+      (2, 1)->unread
+      (3, 1)->unread
+      (1, 2)->read
+      (2, 2)->unread
+      (3, 2)->read
+
+->read_message(3,1)
+  18:  OK
+  Message for user [3, Three]: [1, "Testing sending a message"]
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending..."]
+      2->[sender: 3, group: 10, content: "Valid message s..."]
+  Message state:
+      (1, 1)->read
+      (2, 1)->unread
+      (3, 1)->read
+      (1, 2)->read
+      (2, 2)->unread
+      (3, 2)->read
+
+->read_message(2,1)
+  19:  OK
+  Message for user [2, Two]: [1, "Testing sending a message"]
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending..."]
+      2->[sender: 3, group: 10, content: "Valid message s..."]
+  Message state:
+      (1, 1)->read
+      (2, 1)->read
+      (3, 1)->read
+      (1, 2)->read
+      (2, 2)->unread
+      (3, 2)->read
+
+->list_users
+  20:  OK
+  4->Four
+  1->One
+  3->Three
+  2->Two
+
+->list_groups
+  21:  OK
+  10->Test Group
+
+->set_message_preview(0)
+  22:  ERROR 
+  Message length must be greater than zero.
+
+->set_message_preview(50)
+  23:  OK
+  Users:
+      1->One
+      2->Two
+      3->Three
+      4->Four
+  Groups:
+      10->Test Group
+  Registrations:
+      [1, One]->{10->Test Group}
+      [2, Two]->{10->Test Group}
+      [3, Three]->{10->Test Group}
+  All messages:
+      1->[sender: 1, group: 10, content: "Testing sending a message"]
+      2->[sender: 3, group: 10, content: "Valid message send"]
+  Message state:
+      (1, 1)->read
+      (2, 1)->read
+      (3, 1)->read
+      (1, 2)->read
+      (2, 2)->unread
+      (3, 2)->read
+
