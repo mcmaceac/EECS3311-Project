@@ -72,6 +72,11 @@ feature -- commands
 		end
 
 	delete_message (uid: INTEGER_64; mid: INTEGER_64)
+		require
+			uid > 0 and mid > 0
+			user_id_exists (uid)
+			message_id_exists (uid, mid)
+			old_message_exists (uid, mid)
 		do
 			across users as u
 			loop
@@ -103,6 +108,12 @@ feature -- commands
 		end
 
 	read_message (uid: INTEGER_64; mid: INTEGER_64)
+		require
+			uid > 0 and mid > 0
+			user_id_exists (uid)
+			message_id_exists (uid, mid)
+			user_authorized_to_access_message (uid, mid)
+			not message_read (uid, mid)
 		do
 			across users as u
 			loop
@@ -135,8 +146,12 @@ feature -- commands
 
 	set_message_preview (length: INTEGER_64)
 		--sets the preview length of all messages in the messenger to length
+		require
+			length > 0
 		do
 			message_length := length
+		ensure
+			message_length = length
 		end
 
 feature -- queries
@@ -214,6 +229,10 @@ feature -- queries
 		end
 
 	list_new_messages (uid: INTEGER_64): STRING
+		require
+			uid > 0
+			user_id_exists (uid)
+			not user_no_new_message (uid)
 		do
 			create Result.make_empty
 			across users as u
@@ -225,6 +244,10 @@ feature -- queries
 		end
 
 	list_old_messages (uid: INTEGER_64): STRING
+		require
+			uid > 0
+			user_id_exists (uid)
+			not user_no_old_message (uid)
 		do
 			create Result.make_empty
 			across users as u
@@ -375,6 +398,8 @@ feature -- queries
 
 	list_groups: STRING
 		--lists the users in order of their name
+		require
+			num_groups > 0
 		do
 			sort_by_id := false
 			groups.sort
