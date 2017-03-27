@@ -48,6 +48,7 @@ feature -- creation
 feature -- commands
 
 	add_user (id: INTEGER_64; name: STRING)
+		-- adds user with id 'id' and name 'name' to the messenger
 		require
 			id_positive: id > 0
 			first_letter_alpha: not (name.count = 0) and name.at (1).is_alpha
@@ -60,6 +61,7 @@ feature -- commands
 		end
 
 	add_group (id: INTEGER_64; name: STRING)
+		-- adds group with id 'id' and name 'name' to the messenger
 		require
 			id_positive: id > 0
 			first_letter_alpha: name.count > 0 and name.at (1).is_alpha
@@ -72,6 +74,7 @@ feature -- commands
 		end
 
 	delete_message (uid: INTEGER_64; mid: INTEGER_64)
+		-- user with id 'uid' deletes message with id 'mid' from their "history"
 		require
 			uid > 0 and mid > 0
 			user_id_exists (uid)
@@ -87,6 +90,7 @@ feature -- commands
 		end
 
 	register_user (uid: INTEGER_64; gid: INTEGER_64)
+		-- register user with id 'uid' to group with id 'gid'
 		require
 			uid > 0 and gid > 0
 			user_id_exists (uid)
@@ -108,6 +112,7 @@ feature -- commands
 		end
 
 	read_message (uid: INTEGER_64; mid: INTEGER_64)
+		-- user with id 'uid' reads message with id 'mid'
 		require
 			uid > 0 and mid > 0
 			user_id_exists (uid)
@@ -124,6 +129,7 @@ feature -- commands
 		end
 
 	send_message (uid: INTEGER_64; gid: INTEGER_64; txt: STRING)
+		-- user with id 'uid' sends a message to group with id 'gid' containing text 'txt'
 		require
 			uid > 0 and gid > 0
 			user_id_exists (uid)
@@ -157,6 +163,7 @@ feature -- commands
 feature -- queries
 
 	user_authorized_to_access_message (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		-- checks to see if user with id 'uid' is authorized to access the message with id 'mid'
  		do
  			across users as u
  			loop
@@ -167,11 +174,13 @@ feature -- queries
  		end
 
 	user_id_exists (id: INTEGER_64): BOOLEAN
+		-- checks to see if the user with id 'id' exists in the messenger
 		do
 			Result := across users as u some u.item.id = id end
 		end
 
 	user_no_new_message (id: INTEGER_64): BOOLEAN
+		-- checks to see if the user with id 'id' has no old messages
 		do
 			across users as u
 			loop
@@ -182,6 +191,7 @@ feature -- queries
 		end
 
 	user_no_old_message (id: INTEGER_64): BOOLEAN
+		-- checks to see if the user with id 'id' has no old messages
 		do
 			across users as u
 			loop
@@ -192,6 +202,7 @@ feature -- queries
 		end
 
 	group_id_exists (id: INTEGER_64): BOOLEAN
+		-- group with id 'id' exists in the messenger
 		do
 			Result := across groups as g some g.item.id = id end
 		end
@@ -229,6 +240,7 @@ feature -- queries
 		end
 
 	list_new_messages (uid: INTEGER_64): STRING
+		-- lists the new messages for user with id 'uid'
 		require
 			uid > 0
 			user_id_exists (uid)
@@ -244,6 +256,7 @@ feature -- queries
 		end
 
 	list_old_messages (uid: INTEGER_64): STRING
+		-- lists the old messages for user with id 'uid'
 		require
 			uid > 0
 			user_id_exists (uid)
@@ -288,6 +301,7 @@ feature -- queries
 		end
 
 	message_deleted (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		-- checks to see if user with id 'uid' has deleted a message with id 'mid'
 		do
 			from
 				users.start
@@ -302,6 +316,8 @@ feature -- queries
 		end
 
 	user_member_of_group (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		-- checks to see if user with id 'uid' is a member of the group
+		-- that message with id 'mid' is sent to
 		do
 			from
 				users.start
@@ -322,13 +338,7 @@ feature -- queries
 
 	message_read (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
 		do
---			across users as u
---			loop
---				if u.item.id = uid then
---					Result := u.item.message_status.at (mid)
---				end
---			end
-
+			-- checks to see if user with id 'uid' has read message with id 'mid'
 			from
 				users.start
 			until
@@ -417,6 +427,7 @@ feature -- queries
 		end
 
 	list_registrations: STRING
+		-- returns a formatted list of the registrations for the default output
 		do
 			create Result.make_empty
 			from
@@ -434,6 +445,7 @@ feature -- queries
 		end
 
 	old_message_exists (uid: INTEGER_64; mid: INTEGER_64): BOOLEAN
+		-- user with id 'uid' has an old message with id 'mid'
 		do
 			across users as u
 			loop
@@ -449,6 +461,7 @@ feature -- queries
 		end
 
 	registration_exists (uid: INTEGER_64; gid: INTEGER_64): BOOLEAN
+		-- registration exists between user with id 'uid' and group with id 'gid'
 		do
 			across users as u
 			loop
