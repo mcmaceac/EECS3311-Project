@@ -279,22 +279,20 @@ feature -- queries
 			loop
 				across users as u
 				loop
-					if u.item.registered then
-						Result.append ("      (")
-						Result.append (u.item.id.out)
-						Result.append (", ")
-						Result.append (am.item.number.out)
+					Result.append ("      (")
+					Result.append (u.item.id.out)
+					Result.append (", ")
+					Result.append (am.item.number.out)
 
-						if u.item.has_message (am.item.number) then
-							if u.item.id = am.item.sender or
-						   		u.item.message_status.at (am.item.number) then
-								Result.append (")->read%N")
-							else
-								Result.append (")->unread%N")
-							end
+					if u.item.has_message (am.item.number) then
+						if u.item.id = am.item.sender or
+					   		u.item.message_status.at (am.item.number) then
+							Result.append (")->read%N")
 						else
-							Result.append (")->unavailable%N")
+							Result.append (")->unread%N")
 						end
+					else
+						Result.append (")->unavailable%N")
 					end
 				end
 			end

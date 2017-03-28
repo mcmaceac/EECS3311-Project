@@ -55,6 +55,7 @@
       1->[sender: 1, group: 1, content: "hi"]
   Message state:
       (1, 1)->read
+      (2, 1)->unavailable
 
 ->read_message(2,1)
   6:  ERROR 
