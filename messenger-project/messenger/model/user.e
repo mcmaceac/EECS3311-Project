@@ -58,11 +58,6 @@ feature --attributes
 			end
 		end
 
-	registered: BOOLEAN
-		do
-			Result := not groups.is_empty
-		end
-
 feature --commands
 	add_message (m: MESSAGE)
 		do
@@ -222,7 +217,7 @@ feature --queries
 		do
 			Result := across deleted_messages as m some m.item.number = mid  end
 		end
-	
+
 
 feature --comparable
 	is_less alias "<" (other: like Current): BOOLEAN
