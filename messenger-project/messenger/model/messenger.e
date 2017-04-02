@@ -22,6 +22,7 @@ feature -- attributes
 	message_to_read: STRING
 	message_number: INTEGER_64
 	message_length: INTEGER_64
+		--length of the message preview
 	sort_by_id: BOOLEAN
 
 	num_users: INTEGER_64

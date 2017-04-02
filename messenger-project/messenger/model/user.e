@@ -60,6 +60,7 @@ feature --attributes
 
 feature --commands
 	add_message (m: MESSAGE)
+		--add message m to users "inbox"
 		do
 			messages.force (m)
 			if m.sender = id then --this user sent this message
@@ -70,6 +71,7 @@ feature --commands
 		end
 
 	delete_message (mid: INTEGER_64)
+		--delete message with id mid from user
 		local
 			l_l: SORTED_TWO_WAY_LIST[MESSAGE]
 		do
@@ -86,6 +88,7 @@ feature --commands
 		end
 
 	read_message (mid: INTEGER_64)
+		--read message with id mid
 		do
 			message_status.force (true, mid) --changing the message_status to read
 			across messages as m
@@ -105,7 +108,8 @@ feature --commands
 			end
 		end
 
-	register (g: GROUP) --register this user to group g
+	register (g: GROUP)
+		--register this user to group g
 		do
 			groups.force (g)
 		end
@@ -113,6 +117,7 @@ feature --commands
 feature --queries
 
 	authorized_to_access_message (mid: INTEGER_64): BOOLEAN
+		--Check to see if user is able to access message mid
 		do
 			Result := across messages as m some m.item.number = mid end or
 					  across deleted_messages as m some m.item.number = mid end
@@ -125,11 +130,13 @@ feature --queries
 		end
 
 	no_new_message: BOOLEAN
+		--Checks to see if this user has any new messages
 		do
 			Result := new_messages.count = 0
 		end
 
 	no_old_message: BOOLEAN
+		--Checks to see if this user has any old messages
 		do
 			Result := old_messages.count = 0
 		end
