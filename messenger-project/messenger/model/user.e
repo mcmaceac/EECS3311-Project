@@ -37,6 +37,7 @@ feature --attributes
 	message_status: HASH_TABLE[BOOLEAN, INTEGER_64] --message id to read status for this user
 
 	old_messages: SORTED_TWO_WAY_LIST[MESSAGE]
+		--lists the old messages for this user
 		do
 			create Result.make
 			across messages as m
@@ -48,6 +49,7 @@ feature --attributes
 		end
 
 	new_messages: SORTED_TWO_WAY_LIST[MESSAGE]
+		--lists the new messages for this user
 		do
 			create Result.make
 			across messages as m
@@ -150,6 +152,7 @@ feature --queries
 		end
 
 	list_new_messages: STRING
+		--lists new messages for this user in a readable format
 		do
 			create Result.make_empty
 			Result.append ("  New/unread messages for user [")
@@ -165,6 +168,7 @@ feature --queries
 		end
 
 	list_old_messages: STRING
+		--lists old messages for this user in a readable format
 		do
 			create Result.make_empty
 			Result.append ("  Old/read messages for user [")
@@ -180,6 +184,7 @@ feature --queries
 		end
 
 	list_registrations: STRING
+		--list this user's registrations in a readable format
 		do
 			create Result.make_empty
 			Result.append ("[")
@@ -215,12 +220,14 @@ feature --queries
 		end
 
 	message_id_exists (mid: INTEGER_64): BOOLEAN
+		--does the user have access to a message with id mid?
 		do
 			Result := across messages as m some m.item.number = mid end or
 					  across deleted_messages as m some m.item.number = mid  end
 		end
 
 	message_deleted (mid: INTEGER_64): BOOLEAN
+		--checks to see if a message with id mid was deleted by this user
 		do
 			Result := across deleted_messages as m some m.item.number = mid  end
 		end
